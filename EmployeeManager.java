@@ -53,8 +53,12 @@ public class EmployeeManager {
     private static void listEmployees() {
         System.out.println("Loading data ...");
         try {
-            Arrays.stream(readFile().split(",")).forEach(emp -> System.out.println(emp.trim()));
-        } catch (Exception e) { System.out.println("Error loading file."); }
+            Arrays.stream(readFile().split(","))
+                    .map(String::trim)
+                    .forEach(System.out::println);
+        } catch (Exception e) {
+            System.out.println("Error loading file.");
+        }
         System.out.println("Data Loaded.");
     }
 
@@ -63,24 +67,32 @@ public class EmployeeManager {
         try {
             String[] employees = readFile().split(",");
             System.out.println("Random Employee: " + employees[new Random().nextInt(employees.length)].trim());
-        } catch (Exception e) { System.out.println("Error loading file."); }
+        } catch (Exception e) {
+            System.out.println("Error loading file.");
+        }
         System.out.println("Data Loaded.");
     }
 
     private static void addEmployee(String name) {
         System.out.println("Loading data ...");
-        try { appendToFile(", " + name); } 
-        catch (Exception e) { System.out.println("Error writing to file."); }
+        try {
+            appendToFile(", " + name);
+        } catch (Exception e) {
+            System.out.println("Error writing to file.");
+        }
         System.out.println("Data Loaded.");
     }
 
     private static void searchEmployee(String name) {
         System.out.println("Loading data ...");
         try {
-            System.out.println(Arrays.stream(readFile().split(","))
+            boolean found = Arrays.stream(readFile().split(","))
                     .map(String::trim)
-                    .anyMatch(emp -> emp.equals(name)) ? "Employee found!" : "Employee not found.");
-        } catch (Exception e) { System.out.println("Error reading file."); }
+                    .anyMatch(emp -> emp.equals(name));
+            System.out.println(found ? "Employee found!" : "Employee not found.");
+        } catch (Exception e) {
+            System.out.println("Error reading file.");
+        }
         System.out.println("Data Loaded.");
     }
 
@@ -88,13 +100,15 @@ public class EmployeeManager {
         System.out.println("Loading data ...");
         try {
             char[] chars = readFile().toCharArray();
-            boolean insideWord = false;
             int count = 0;
+            boolean insideWord = false;
             for (char ch : chars) {
                 if (ch == ' ') { count += insideWord ? 0 : 1; insideWord = !insideWord; }
             }
             System.out.println(count + " word(s) found, total chars: " + chars.length);
-        } catch (Exception e) { System.out.println("Error reading file."); }
+        } catch (Exception e) {
+            System.out.println("Error reading file.");
+        }
         System.out.println("Data Loaded.");
     }
 
@@ -105,7 +119,9 @@ public class EmployeeManager {
             for (int i = 0; i < employees.length; i++)
                 if (employees[i].trim().equals(name)) employees[i] = "Updated";
             writeFile(String.join(",", employees));
-        } catch (Exception e) { System.out.println("Error updating file."); }
+        } catch (Exception e) {
+            System.out.println("Error updating file.");
+        }
         System.out.println("Data Updated.");
     }
 
@@ -116,7 +132,9 @@ public class EmployeeManager {
                     .map(String::trim)
                     .filter(emp -> !emp.equals(name))
                     .toArray(String[]::new)));
-        } catch (Exception e) { System.out.println("Error deleting data."); }
+        } catch (Exception e) {
+            System.out.println("Error deleting data.");
+        }
         System.out.println("Data Deleted.");
     }
 }
